@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Aquire";
+  src: url("./assets/fonts/aquire/Aquire-BW0ox.otf") format("opentype");
+}
+body {
+  color: white;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.button-border {
+  position: relative;
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.button-border:hover {
+  transition: all 0.2s linear;
+  transform: scale(1.1);
+  background-color: #cacaca28;
+  border-radius: 41px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.button-border:active {
+  transform: translateY(1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.button-border::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 41px;
+  padding: 1px;
+  background: linear-gradient(to right, #ff9700, #58f96e);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.button-filled {
+    background: linear-gradient(180deg, #87ff98 0%, #f7941d 83.33%);
+  }
+  
+  .button-filled:hover {
+    transition: all 0.2s linear;
+    transform: scale(1.1);
+  }
+  .button-filled:active {
+    transform: translateY(1px);
+  }
+
+.text-stroke {
+  text-shadow: 1px 1px 0 #f7941d, -1px -1px 0 #f7941d, 1px -1px 0 #f7941d,
+    -1px 1px 0 #f7941d, 1px 1px 0 #f7941d;
+}
+.color-border::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(to right, #ff9700, #58f96e);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  border-radius: 15px;
+}
+
+.number-card {
+  background: linear-gradient(180deg, #87ff98 -29.17%, #f7941d 78.47%);
+}
