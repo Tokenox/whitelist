@@ -37,7 +37,7 @@ const VerificationModal = ({
             renderInput={(props) => <input {...props} />}
             containerStyle={"flex justify-center gap-2 w-full"}
             inputStyle={
-              "!w-[50px] h-[60px] bg-transparent border border-[#9B6D2B] rounded-xl text-lg md:text-2xl font-bold text-center p-1 !outline-none"
+              "!w-9 md:!w-[50px] h-11 md:h-[60px] bg-transparent border border-[#9B6D2B] rounded-xl text-lg md:text-2xl font-bold text-center p-1 !outline-none"
             }
           />
         </div>
