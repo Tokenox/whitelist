@@ -4,6 +4,8 @@ import emailIcon from "../assets/email.svg";
 import phoneIcon from "../assets/phone.svg";
 import countryIcon from "../assets/globe.svg";
 import { countries } from "../assets/constants";
+import axios from "axios";
+import Loading from "./Loading";
 
 const JoinModal = ({
   setShowModal,
@@ -17,6 +19,8 @@ const JoinModal = ({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
+  const [countryName, setCountryName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [err, setErr] = useState({
     fullName: "",
@@ -25,7 +29,7 @@ const JoinModal = ({
     country: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errObj = { fullName: "", email: "", phone: "", country: "" };
     if (!fullName) {
@@ -56,6 +60,38 @@ const JoinModal = ({
       errObj.phone = "Phone is invalid";
     }
     setErr(errObj);
+
+    // call api
+    setLoading(true);
+    const data = new URLSearchParams();
+    data.append("fullname", fullName);
+    data.append("email", email);
+    data.append("country", countryName);
+    data.append("phone", phone);
+    const response = await axios.post(
+      "https://script.google.com/macros/s/AKfycbydFa0afvLEfALhA4cXVJpmqWHhQpR5QsrsxnD21NiEHFVOkIcq6SBODAcf2OvfZeC3/exec",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    if (response.status === 200) {
+      if (response.data.status === "error") {
+        if (response.data.errors.email) {
+          window.alert(response.data.errors.email);
+          setLoading(false);
+          return;
+        }
+        window.alert("Something went wrong, please try again");
+        setLoading(false);
+        return;
+      }
+      setShowModal(false);
+      setLoading(false);
+      window.alert("You have successfully joined the whitelist");
+    }
   };
 
   return (
@@ -85,9 +121,7 @@ const JoinModal = ({
                   className="bg-transparent w-full outline-none"
                 />
               </div>
-              {err.fullName && (
-                <p className="text-red-500 text-xs mt-1 ml-2">{err.fullName}</p>
-              )}
+              {err.fullName && <p className="text-red-500 text-xs mt-1 ml-2">{err.fullName}</p>}
             </div>
             <div>
               <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -100,9 +134,7 @@ const JoinModal = ({
                   className="bg-transparent w-full outline-none"
                 />
               </div>
-              {err.email && (
-                <p className="text-red-500 text-xs mt-1 ml-2">{err.email}</p>
-              )}
+              {err.email && <p className="text-red-500 text-xs mt-1 ml-2">{err.email}</p>}
             </div>
             <div>
               <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -113,6 +145,7 @@ const JoinModal = ({
                   onChange={(e) => {
                     const { code, name } = JSON.parse(e.target.value);
                     setCountry(e.target.value);
+                    setCountryName(name);
                     setPhone(code);
                   }}
                 >
@@ -125,9 +158,7 @@ const JoinModal = ({
                   ))}
                 </select>
               </div>
-              {err.country && (
-                <p className="text-red-500 text-xs mt-1 ml-2">{err.country}</p>
-              )}
+              {err.country && <p className="text-red-500 text-xs mt-1 ml-2">{err.country}</p>}
             </div>
             <div>
               <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -140,16 +171,14 @@ const JoinModal = ({
                   className="bg-transparent w-full outline-none"
                 />
               </div>
-              {err.phone && (
-                <p className="text-red-500 text-xs mt-1 ml-2">{err.phone}</p>
-              )}
+              {err.phone && <p className="text-red-500 text-xs mt-1 ml-2">{err.phone}</p>}
             </div>
 
             <button
               type="submit"
-              className="button-filled w-full h-12 rounded-[62px] text-base font-bold leading-6 font-roboto mt-[18px]"
+              className="button-filled w-full h-12 rounded-[62px] text-base font-bold leading-6 font-roboto mt-[18px] flex items-center justify-center"
             >
-              Join Whitlist
+              {loading ? <Loading /> : "Join Whitelist"}
             </button>
           </div>
         </form>
