@@ -102,7 +102,7 @@ const JoinModal = ({
       ></div>
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 color-border backdrop-blur-[6px] py-12 px-11 w-[440px] max-w-[90vw]">
         <h5 className="text-white text-stroke text-center font-poppins text-[32px] mb-9">
-          JOIN THE WHITLIST
+          JOIN THE WHITELIST
         </h5>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-[22px]">
