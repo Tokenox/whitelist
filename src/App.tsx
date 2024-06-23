@@ -1,24 +1,43 @@
 import logoSm from "./assets/logo-sm.svg";
 import Clients from "./components/Clients";
 import Footer from "./components/Footer";
-import { NumberCrad } from "./components/NumberCrad";
+import { NumberCard } from "./components/NumberCard";
 import plant from "./assets/plant.png";
 import JoinModal from "./components/JoinModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [showWhitelistModal, setShowWhitelistModal] = useState(false);
+  const [days, setDays] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      timeLeftToInvest();
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const timeLeftToInvest = () => {
+    const currentDate = new Date();
+    const endDate = new Date("2024-07-03");
+    const totalSeconds = (Number(endDate) - Number(currentDate)) / 1000;
+    const days = Math.floor(totalSeconds / 3600 / 24);
+    const hours = Math.floor(totalSeconds / 3600) % 24;
+    const minutes = Math.floor(totalSeconds / 60) % 60;
+    const seconds = Math.floor(totalSeconds) % 60;
+    setDays(days);
+    setHours(hours);
+    setMinutes(minutes);
+    setSeconds(seconds);
+  };
   return (
     <>
-      <div className="min-[900px]:bg-hero-lg bg-hero-md w-screen h-screen bg-cover bg-no-repeat md:bg-center bg-bottom">
+      <div className="min-[900px]:bg-hero-lg bg-hero-md w-full h-screen bg-cover bg-no-repeat md:bg-center bg-bottom">
         <nav className="lg:px-[7.5%] pt-2.5 px-6 flex justify-between items-center">
-          <img
-            src={logoSm}
-            alt="logo"
-            className="w-[151px] h-[54px]"
-            width={151}
-            height={54}
-          />
+          <img src={logoSm} alt="logo" className="w-[151px] h-[54px]" width={151} height={54} />
           <button className="button-border px-10 py-2.5 text-base font-medium h-10 flex items-center font-roboto-condensed">
             Whitepaper
           </button>
@@ -40,66 +59,51 @@ function App() {
 
             <div className="relative z-10 flex justify-between">
               <div className="flex flex-col items-center">
-                <NumberCrad number={9} />
-                <p className="font-roboto font-medium text-[15px] mt-1.5">
-                  Day
-                </p>
+                <NumberCard number={days} />
+                <p className="font-roboto font-medium text-[15px] mt-1.5">Day</p>
               </div>
               <p className="font-poppins font-medium text-sm mt-3.5">:</p>
               <div className="flex flex-col items-center">
-                <NumberCrad number={16} />
-                <p className="font-roboto font-medium text-[15px] mt-1.5">
-                  Hours
-                </p>
+                <NumberCard number={hours} />
+                <p className="font-roboto font-medium text-[15px] mt-1.5">Hours</p>
               </div>
               <p className="font-poppins font-medium text-sm mt-3.5">:</p>
               <div className="flex flex-col items-center">
-                <NumberCrad number={34} />
-                <p className="font-roboto font-medium text-[15px] mt-1.5">
-                  Min
-                </p>
+                <NumberCard number={minutes} />
+                <p className="font-roboto font-medium text-[15px] mt-1.5">Min</p>
               </div>
               <p className="font-poppins font-medium text-sm mt-3.5">:</p>
               <div className="flex flex-col items-center">
-                <NumberCrad number={33} />
-                <p className="font-roboto font-medium text-[15px] mt-1.5">
-                  Sec
-                </p>
+                <NumberCard number={seconds} />
+                <p className="font-roboto font-medium text-[15px] mt-1.5">Sec</p>
               </div>
             </div>
           </div>
 
-          <button className="button-filled w-[220px] h-12 rounded-[38px] text-xl font-bold leading-6 font-roboto-condensed"
+          <button
+            className="button-filled w-[220px] h-12 rounded-[38px] text-xl font-bold leading-6 font-roboto-condensed"
             onClick={() => setShowWhitelistModal(true)}
           >
-            Join Whitlist
+            Join Whitelist
           </button>
         </div>
       </div>
 
       <section className="px-[7.5%] md:py-[74px] py-10 flex justify-between md:flex-row flex-col-reverse gap-8 lg:gap-[15.5%] md:gap-[9%] bg-[#F7941D0D]">
-        <img
-          src={plant}
-          alt="plant"
-          className="w-auto object-contain"
-          width={275}
-          height={435}
-        />
+        <img src={plant} alt="plant" className="w-auto object-contain" width={275} height={435} />
         <div className="flex flex-col justify-center">
           <h3 className="font-roboto lg:text-[48px] text-[34px] font-bold">
-            <span className="text-black">About</span>{" "}
-            <span className="text-[#39B54A]">Food</span>
+            <span className="text-black">About</span> <span className="text-[#39B54A]">Food</span>
             <span className="text-[#F7941D]">Sply</span>
           </h3>
           <div className="md:mt-9 mt-3 font-roboto lg:text-[22px] md:text-lg text-base text-black">
             <p>
-              We are feeding the future by connecting farmers, suppliers, and
-              consumers through our FOODSPLY Platform, building a network that
-              nourishes today and sustains tomorrow.
+              We are feeding the future by connecting farmers, suppliers, and consumers through our
+              FOODSPLY Platform, building a network that nourishes today and sustains tomorrow.
             </p>
             <p className="md:mt-5 mt-3">
-              Our vision is to create a food supply chain marketplace that
-              brings together all parties in the agri-food value chain.
+              Our vision is to create a food supply chain marketplace that brings together all
+              parties in the agri-food value chain.
             </p>
           </div>
         </div>
