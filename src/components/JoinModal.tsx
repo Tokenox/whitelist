@@ -7,6 +7,7 @@ import { countries } from "../assets/constants";
 import axios from "axios";
 import Loading from "./Loading";
 import VerificationModal from "./VerificationModal";
+import { useAccount } from "wagmi";
 
 const JoinModal = ({
   setShowModal,
@@ -20,6 +21,7 @@ const JoinModal = ({
   const [countryName, setCountryName] = useState("");
   const [loading, setLoading] = useState(false);
   const [isVerify, setIsVerify] = useState(false);
+  const { address } = useAccount();
 
   const [err, setErr] = useState({
     fullName: "",
@@ -58,6 +60,10 @@ const JoinModal = ({
     if (!/^[0-9\s+]+$/.test(phone)) {
       errObj.phone = "Phone is invalid";
     }
+    if(!address){
+      window.alert("Please connect your wallet to join the whitelist");
+      return;
+    }
     setErr(errObj);
 
     // call api
@@ -68,8 +74,9 @@ const JoinModal = ({
     data.append("country", countryName);
     data.append("phone", phone);
     data.append("action", "register");
+    data.append("address", address);
     const response = await axios.post(
-      "https://script.google.com/macros/s/AKfycbzkphW1fxf5cG-36_xRwH7wwvyhYgy64TH-I0URFgE2mFU0oHtuHN4kDk8xfT6KxKBG/exec",
+      "https://script.google.com/macros/s/AKfycbxQQN8mf5TmPLPJJ3OCKvgGrrkA0XaSuIMI28BoEN8rbF3r6chGDPiKXq6GY2ar9lNP/exec",
       data,
       {
         headers: {
@@ -101,7 +108,10 @@ const JoinModal = ({
         onClick={() => setShowModal(false)}
       />
       {isVerify ? (
-        <VerificationModal email={email} closeModal={() => setShowModal(false)} />
+        <VerificationModal
+          email={email}
+          closeModal={() => setShowModal(false)}
+        />
       ) : (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 color-border backdrop-blur-[6px] py-12 px-11 w-[440px] max-w-[90vw]">
           <h5 className="text-white text-stroke text-center font-poppins text-[32px] mb-9">
@@ -124,7 +134,11 @@ const JoinModal = ({
                     className="bg-transparent w-full outline-none"
                   />
                 </div>
-                {err.fullName && <p className="text-red-500 text-xs mt-1 ml-2">{err.fullName}</p>}
+                {err.fullName && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">
+                    {err.fullName}
+                  </p>
+                )}
               </div>
               <div>
                 <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -137,7 +151,9 @@ const JoinModal = ({
                     className="bg-transparent w-full outline-none"
                   />
                 </div>
-                {err.email && <p className="text-red-500 text-xs mt-1 ml-2">{err.email}</p>}
+                {err.email && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">{err.email}</p>
+                )}
               </div>
               <div>
                 <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -161,7 +177,11 @@ const JoinModal = ({
                     ))}
                   </select>
                 </div>
-                {err.country && <p className="text-red-500 text-xs mt-1 ml-2">{err.country}</p>}
+                {err.country && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">
+                    {err.country}
+                  </p>
+                )}
               </div>
               <div>
                 <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -177,7 +197,9 @@ const JoinModal = ({
                     className="bg-transparent w-full outline-none"
                   />
                 </div>
-                {err.phone && <p className="text-red-500 text-xs mt-1 ml-2">{err.phone}</p>}
+                {err.phone && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">{err.phone}</p>
+                )}
               </div>
 
               <button

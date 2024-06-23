@@ -5,6 +5,8 @@ import { NumberCard } from "./components/NumberCard";
 import plant from "./assets/plant.png";
 import JoinModal from "./components/JoinModal";
 import { useEffect, useState } from "react";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 function App() {
   const [showWhitelistModal, setShowWhitelistModal] = useState(false);
@@ -12,6 +14,9 @@ function App() {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+
+  const { openConnectModal } = useConnectModal();
+  const { isConnected } = useAccount();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -37,7 +42,13 @@ function App() {
     <>
       <div className="min-[900px]:bg-hero-lg bg-hero-md w-full h-screen bg-cover bg-no-repeat md:bg-center bg-bottom">
         <nav className="lg:px-[7.5%] pt-2.5 px-6 flex justify-between items-center">
-          <img src={logoSm} alt="logo" className="w-[151px] h-[54px]" width={151} height={54} />
+          <img
+            src={logoSm}
+            alt="logo"
+            className="w-[151px] h-[54px]"
+            width={151}
+            height={54}
+          />
           <button className="button-border px-10 py-2.5 text-base font-medium h-10 flex items-center font-roboto-condensed">
             Whitepaper
           </button>
@@ -60,50 +71,70 @@ function App() {
             <div className="relative z-10 flex justify-between">
               <div className="flex flex-col items-center">
                 <NumberCard number={days} />
-                <p className="font-roboto font-medium text-[15px] mt-1.5">Day</p>
+                <p className="font-roboto font-medium text-[15px] mt-1.5">
+                  Day
+                </p>
               </div>
               <p className="font-poppins font-medium text-sm mt-3.5">:</p>
               <div className="flex flex-col items-center">
                 <NumberCard number={hours} />
-                <p className="font-roboto font-medium text-[15px] mt-1.5">Hours</p>
+                <p className="font-roboto font-medium text-[15px] mt-1.5">
+                  Hours
+                </p>
               </div>
               <p className="font-poppins font-medium text-sm mt-3.5">:</p>
               <div className="flex flex-col items-center">
                 <NumberCard number={minutes} />
-                <p className="font-roboto font-medium text-[15px] mt-1.5">Min</p>
+                <p className="font-roboto font-medium text-[15px] mt-1.5">
+                  Min
+                </p>
               </div>
               <p className="font-poppins font-medium text-sm mt-3.5">:</p>
               <div className="flex flex-col items-center">
                 <NumberCard number={seconds} />
-                <p className="font-roboto font-medium text-[15px] mt-1.5">Sec</p>
+                <p className="font-roboto font-medium text-[15px] mt-1.5">
+                  Sec
+                </p>
               </div>
             </div>
           </div>
 
           <button
             className="button-filled w-[220px] h-12 rounded-[38px] text-xl font-bold leading-6 font-roboto-condensed"
-            onClick={() => setShowWhitelistModal(true)}
+            onClick={() =>
+              isConnected
+                ? setShowWhitelistModal(true)
+                : openConnectModal && openConnectModal()
+            }
           >
-            Join Whitelist
+            {isConnected ? "Join Whitelist" : "Connect Wallet"}
           </button>
         </div>
       </div>
 
       <section className="px-[7.5%] md:py-[74px] py-10 flex justify-between md:flex-row flex-col-reverse gap-8 lg:gap-[15.5%] md:gap-[9%] bg-[#F7941D0D]">
-        <img src={plant} alt="plant" className="w-auto object-contain" width={275} height={435} />
+        <img
+          src={plant}
+          alt="plant"
+          className="w-auto object-contain"
+          width={275}
+          height={435}
+        />
         <div className="flex flex-col justify-center">
           <h3 className="font-roboto lg:text-[48px] text-[34px] font-bold">
-            <span className="text-black">About</span> <span className="text-[#39B54A]">Food</span>
+            <span className="text-black">About</span>{" "}
+            <span className="text-[#39B54A]">Food</span>
             <span className="text-[#F7941D]">Sply</span>
           </h3>
           <div className="md:mt-9 mt-3 font-roboto lg:text-[22px] md:text-lg text-base text-black">
             <p>
-              We are feeding the future by connecting farmers, suppliers, and consumers through our
-              FOODSPLY Platform, building a network that nourishes today and sustains tomorrow.
+              We are feeding the future by connecting farmers, suppliers, and
+              consumers through our FOODSPLY Platform, building a network that
+              nourishes today and sustains tomorrow.
             </p>
             <p className="md:mt-5 mt-3">
-              Our vision is to create a food supply chain marketplace that brings together all
-              parties in the agri-food value chain.
+              Our vision is to create a food supply chain marketplace that
+              brings together all parties in the agri-food value chain.
             </p>
           </div>
         </div>
