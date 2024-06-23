@@ -56,12 +56,12 @@ const VerificationModal = ({ email, closeModal }: VerificationModalProps) => {
           <img src={VerifyImage} alt="foodsply" className="w-full h-full" />
         </div>
       </div>
-      <h2 className="text-white text-base font-bold text-center mb-6">
-        Verify Your Email Address
-      </h2>
+      <h2 className="text-white text-base font-bold text-center mb-6">Verify Your Email Address</h2>
       <p className="text-white text-sm text-center font-normal leading-[17px] mb-6">
-        We emailed you a six-digit code at username@gmail.com. Enter the code
-        below to verify your email address
+        {email
+          ? `We emailed you a six-digit code at ${email}. Enter the code
+        below to verify your email address`
+          : null}
       </p>
       <div>
         <OtpInput
@@ -75,9 +75,7 @@ const VerificationModal = ({ email, closeModal }: VerificationModalProps) => {
             "!w-9 md:!w-[50px] h-11 md:h-[60px] bg-transparent border border-[#9B6D2B] rounded-xl text-lg md:text-2xl font-bold text-center p-1 !outline-none"
           }
         />
-        {error ? (
-          <p className="text-red-500 text-sm text-center mt-2">{error}</p>
-        ) : null}
+        {error ? <p className="text-red-500 text-sm text-center mt-2">{error}</p> : null}
         {loading ? (
           <div className="flex justify-center p-2 pt-6">
             <Loading />
