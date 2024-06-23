@@ -5,8 +5,10 @@ import { NumberCard } from "./components/NumberCard";
 import plant from "./assets/plant.png";
 import JoinModal from "./components/JoinModal";
 import { useEffect, useState } from "react";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
+
+import walletImg from "./assets/wallet.png";
 
 function App() {
   const [showWhitelistModal, setShowWhitelistModal] = useState(false);
@@ -16,7 +18,8 @@ function App() {
   const [seconds, setSeconds] = useState(0);
 
   const { openConnectModal } = useConnectModal();
-  const { isConnected } = useAccount();
+  const { openAccountModal } = useAccountModal();
+  const { isConnected, address } = useAccount();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -42,10 +45,35 @@ function App() {
     <>
       <div className="min-[900px]:bg-hero-lg bg-hero-md w-full h-screen bg-cover bg-no-repeat md:bg-center bg-bottom">
         <nav className="lg:px-[7.5%] pt-2.5 px-6 flex justify-between items-center">
-          <img src={logoSm} alt="logo" className="w-[151px] h-[54px]" width={151} height={54} />
-          <button className="button-border px-10 py-2.5 text-base font-medium h-10 flex items-center font-roboto-condensed">
-            Whitepaper
-          </button>
+          <img src={logoSm} alt="logo" className="sm:w-[151px] sm:h-[54px] w-[120px] h-auto" width={151} height={54} />
+          <div className="flex sm:gap-5 gap-2.5 items-center">
+            <img src={walletImg} alt="wallet" width={24} height={24} className="md:hidden flex text-white cursor-pointer"  onClick={() => {
+                if (!isConnected) {
+                  openConnectModal && openConnectModal();
+                } else if (address) {
+                  openAccountModal && openAccountModal();
+                }
+              }} />
+            
+            <button
+              className="button-border px-10 py-2.5 text-base font-medium h-10 items-center font-roboto-condensed rounded-full md:flex hidden"
+              onClick={() => {
+                if (!isConnected) {
+                  openConnectModal && openConnectModal();
+                } else if (address) {
+                  openAccountModal && openAccountModal();
+                }
+              }}
+            >
+              {address
+                ? address.slice(0, 6) + "..." + address.slice(-4)
+                : "Connect Wallet"}
+            </button>
+            <button className="button-filled rounded-full sm:px-10 px-5 sm:py-2.5 py-1.5 text-base font-medium h-10 flex items-center font-roboto-condensed">
+              Whitepaper
+            </button>
+          </div>
+
         </nav>
         <div className="flex flex-col items-center">
           <h3 className="text-white font-roboto-condensed md:text-[40px] text-[30px] text-stroke text-center leading-[48px] md:mt-7 mt-5">
