@@ -170,7 +170,10 @@ const JoinModal = ({
                     type="tel"
                     placeholder="Phone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => {
+                      if (/[^0-9\s+]/.test(e.target.value)) return;
+                      setPhone(e.target.value);
+                    }}
                     className="bg-transparent w-full outline-none"
                   />
                 </div>
