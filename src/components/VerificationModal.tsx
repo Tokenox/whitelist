@@ -4,6 +4,7 @@ import OtpInput from "react-otp-input";
 import axios from "axios";
 import Loading from "./Loading";
 import { useAccount } from "wagmi";
+import { notify } from "../helper";
 
 type VerificationModalProps = {
   email: string;
@@ -43,7 +44,10 @@ const VerificationModal = ({ email, closeModal }: VerificationModalProps) => {
           }
           setLoading(false);
           closeModal();
-          window.alert("You have successfully verified your email and joined");
+          notify({
+            message: "You have successfully verified your email and joined",
+            type: "success",
+          });
         }
       }
     })();

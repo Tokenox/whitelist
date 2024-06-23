@@ -8,6 +8,7 @@ import axios from "axios";
 import Loading from "./Loading";
 import VerificationModal from "./VerificationModal";
 import { useAccount } from "wagmi";
+import { notify } from "../helper";
 
 const JoinModal = ({
   setShowModal,
@@ -60,7 +61,7 @@ const JoinModal = ({
     if (!/^[0-9\s+]+$/.test(phone)) {
       errObj.phone = "Phone is invalid";
     }
-    if(!address){
+    if (!address) {
       window.alert("Please connect your wallet to join the whitelist");
       return;
     }
@@ -87,17 +88,18 @@ const JoinModal = ({
     if (response.status === 200) {
       if (response.data.status === "error") {
         if (response.data.errors.email) {
-          window.alert(response.data.errors.email);
+          notify({ message: response.data.errors.email, type: "error" });
           setLoading(false);
           return;
         }
-        window.alert("Something went wrong, please try again");
+        notify({ message: "You have already joined the whitelist", type: "error" });
         setLoading(false);
         return;
       }
       // setShowModal(false);
       setLoading(false);
       setIsVerify(true);
+      notify({ message: "Verification code has been sent to your email", type: "success" });
     }
   };
 
@@ -108,10 +110,7 @@ const JoinModal = ({
         onClick={() => setShowModal(false)}
       />
       {isVerify ? (
-        <VerificationModal
-          email={email}
-          closeModal={() => setShowModal(false)}
-        />
+        <VerificationModal email={email} closeModal={() => setShowModal(false)} />
       ) : (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 color-border backdrop-blur-[6px] py-12 px-11 w-[440px] max-w-[90vw]">
           <h5 className="text-white text-stroke text-center font-poppins text-[32px] mb-9">
@@ -134,11 +133,7 @@ const JoinModal = ({
                     className="bg-transparent w-full outline-none"
                   />
                 </div>
-                {err.fullName && (
-                  <p className="text-red-500 text-xs mt-1 ml-2">
-                    {err.fullName}
-                  </p>
-                )}
+                {err.fullName && <p className="text-red-500 text-xs mt-1 ml-2">{err.fullName}</p>}
               </div>
               <div>
                 <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -151,9 +146,7 @@ const JoinModal = ({
                     className="bg-transparent w-full outline-none"
                   />
                 </div>
-                {err.email && (
-                  <p className="text-red-500 text-xs mt-1 ml-2">{err.email}</p>
-                )}
+                {err.email && <p className="text-red-500 text-xs mt-1 ml-2">{err.email}</p>}
               </div>
               <div>
                 <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -177,11 +170,7 @@ const JoinModal = ({
                     ))}
                   </select>
                 </div>
-                {err.country && (
-                  <p className="text-red-500 text-xs mt-1 ml-2">
-                    {err.country}
-                  </p>
-                )}
+                {err.country && <p className="text-red-500 text-xs mt-1 ml-2">{err.country}</p>}
               </div>
               <div>
                 <div className="backdrop-blur-[15px] w-full border border-white bg-[#ffffff1a] py-1 px-4 h-11 rounded-[54px] flex gap-2">
@@ -197,9 +186,7 @@ const JoinModal = ({
                     className="bg-transparent w-full outline-none"
                   />
                 </div>
-                {err.phone && (
-                  <p className="text-red-500 text-xs mt-1 ml-2">{err.phone}</p>
-                )}
+                {err.phone && <p className="text-red-500 text-xs mt-1 ml-2">{err.phone}</p>}
               </div>
 
               <button
