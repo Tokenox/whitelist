@@ -12,8 +12,10 @@ import { notify } from "../helper";
 
 const JoinModal = ({
   setShowModal,
+  refetch,
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => void;
 }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -77,7 +79,7 @@ const JoinModal = ({
     data.append("action", "register");
     data.append("address", address);
     const response = await axios.post(
-      "https://script.google.com/macros/s/AKfycbxQQN8mf5TmPLPJJ3OCKvgGrrkA0XaSuIMI28BoEN8rbF3r6chGDPiKXq6GY2ar9lNP/exec",
+      "https://script.google.com/macros/s/AKfycbzstAPs4HCITaHwljEuqSeNMJbv3Vt5VMQaOiSDHVPBqhBukZ6aMyu5wCV_-uxphBKi/exec",
       data,
       {
         headers: {
@@ -100,6 +102,7 @@ const JoinModal = ({
       setLoading(false);
       setIsVerify(true);
       notify({ message: "Verification code has been sent to your email", type: "success" });
+      refetch();
     }
   };
 
@@ -110,7 +113,7 @@ const JoinModal = ({
         onClick={() => setShowModal(false)}
       />
       {isVerify ? (
-        <VerificationModal email={email} closeModal={() => setShowModal(false)} />
+        <VerificationModal email={email} closeModal={() => setShowModal(false)} refetch={refetch} />
       ) : (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 color-border backdrop-blur-[6px] py-12 px-11 w-[440px] max-w-[90vw]">
           <h5 className="text-white text-stroke text-center font-poppins text-[32px] mb-9">

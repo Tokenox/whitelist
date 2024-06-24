@@ -9,9 +9,10 @@ import { notify } from "../helper";
 type VerificationModalProps = {
   email: string;
   closeModal: () => void;
+  refetch: () => void;
 };
 
-const VerificationModal = ({ email, closeModal }: VerificationModalProps) => {
+const VerificationModal = ({ email, closeModal,refetch }: VerificationModalProps) => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -28,7 +29,7 @@ const VerificationModal = ({ email, closeModal }: VerificationModalProps) => {
         data.append("address", address);
         data.append("action", "verify");
         const response = await axios.post(
-          "https://script.google.com/macros/s/AKfycbxQQN8mf5TmPLPJJ3OCKvgGrrkA0XaSuIMI28BoEN8rbF3r6chGDPiKXq6GY2ar9lNP/exec",
+          "https://script.google.com/macros/s/AKfycbzstAPs4HCITaHwljEuqSeNMJbv3Vt5VMQaOiSDHVPBqhBukZ6aMyu5wCV_-uxphBKi/exec",
           data,
           {
             headers: {
@@ -49,6 +50,7 @@ const VerificationModal = ({ email, closeModal }: VerificationModalProps) => {
             type: "success",
           });
         }
+        refetch();
       }
     })();
   }, [otp, email, address]);
